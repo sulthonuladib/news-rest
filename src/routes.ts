@@ -1,7 +1,7 @@
-import {UserController} from "./controller/UserController";
+// "import {UserController} from "./controller/UserController";
 
 export const Routes = [{
-    method: "get",
+    /*method: "get",
     route: "/users",
     controller: UserController,
     action: "all"
@@ -19,5 +19,5 @@ export const Routes = [{
     method: "delete",
     route: "/users/:id",
     controller: UserController,
-    action: "remove"
+    action: "remove"*/
 }];
