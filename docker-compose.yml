@@ -19,8 +19,9 @@ services:
     depends_on:
       - postgres_dev
     container_name: "db_manager"
-    resart: always
-    ports: 8080:8080
+    restart: always
+    ports:
+      - 8080:8080
 
 
 # postgres_test:
