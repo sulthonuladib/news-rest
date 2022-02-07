@@ -21,7 +21,7 @@ export class NewsController {
     }
 
     public indexByStatus: ControllerMethod = async (req, res) => {
-        return res.send(await this.services.indexByStatus(req.params.statusName));
+        return res.send(await this.services.indexByStatus(req.query.status));
     }
 
     public create = async (req: Request, res: Response, next: NextFunction) => {
@@ -55,7 +55,7 @@ export class NewsController {
     public routes() {
         this.router.get('/', this.index);
         this.router.get('/:topic', this.indexByTopic)
-        this.router.get('/status/:statusName')
+        this.router.get('/status/:statusName', this.indexByStatus)
         this.router.post('/', this.create);
         this.router.put('/:id', this.update);
         this.router.delete('/:id', this.delete);

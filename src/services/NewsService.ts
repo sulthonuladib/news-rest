@@ -27,7 +27,8 @@ export class NewsService {
         return news;
     }
 
-    public indexByStatus = async (status: string) => {
+    public indexByStatus = async (status) => {
+        console.log(status)
         const news = await this.repository.find({
             where: {
                 status: status
