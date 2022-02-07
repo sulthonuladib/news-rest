@@ -1,10 +1,18 @@
+import { timeStamp } from 'console';
 import  * as express from 'express';
 import {Request, Response} from 'express';
 import { connect } from 'net';
 import {createConnection} from 'typeorm';
 
+import 'express-async-error'
+
 import { NewsController } from './controllers/NewsController';
 import { TopicController } from './controllers/TopicController';
+
+import { News } from './entity/News';
+import { Topic } from './entity/Topic';
+
+import ExceptionHandlers from './utils/ExceptionHandlers';
 
 export class Server {
     private newsController: NewsController;
@@ -14,43 +22,46 @@ export class Server {
     constructor() {
         this.app = express();
         this.configuration();
-
-        this.newsController = new NewsController();
-        this.topicController = new TopicController();
-
         this.routes();
     }
 
     public configuration() {
+        this.app.use(express.json());
+        this.app.use(express.urlencoded());
         this.app.set('port', process.env.PORT || 3000);
+
+        this.app.use(ExceptionHandlers);
     }
 
     public async routes() {
         await createConnection({
             type: "postgres",
-            host: "postgres_dev",
+            host: "localhost",
             port: 5432,
             username: process.env.POSTGRES_USER || "news_api_db",
             password: process.env.POSTGRES_PASSWORD || "news_api_db",
             database: process.env.POSTGRES_DB || "news_api_db",
             entities: [
-                "/entity/*.ts",
-                "/src/entity/*.ts",
-                "entity/*.ts",
-                "src/entity/*.ts",
+                // `/entity/*${'.ts' || '.js'}`,
+                // `/src/entity/*${'.ts' || '.js'}`,
+                // `entity/*${'.ts' || '.js'}`,
+                // `src/entity/*${'.ts' || '.js'}`,
+                Topic,
+                News
             ],
             synchronize: true,
-            name: "news_api"
         }).then(connection => {
-
-            this.app.use('/api/news', this.newsController.router);
-            this.app.use('/api/topics', this.topicController.router);
-
-            this.app.get('/api', (req: Request, res: Response) =>  {
-                res.send("news rest api")
-            });
         });
 
+        this.newsController = new NewsController();
+        this.topicController = new TopicController();
+
+        this.app.use('/api/news', this.newsController.router);
+        this.app.use('/api/topics', this.topicController.router);
+
+        this.app.get('/api', (req: Request, res: Response) =>  {
+            // res.send("news rest api")
+        });
 
     }
 
