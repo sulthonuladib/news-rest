@@ -22,9 +22,16 @@ export class TopicController {
 
     public create = async (req: Request, res: Response, next: NextFunction) => {
         try {
-            res.send(await this.services.create(req.body));
+            const result = await this.services.create(req.body);
+            res.status(200).send({
+                message: "success",
+                data: result,
+            })
         } catch (error) {
-            next(error);
+            res.status(500).send({
+                message: "failed",
+                data: error
+            })
             
         }
     }
