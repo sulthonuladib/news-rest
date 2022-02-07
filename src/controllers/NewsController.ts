@@ -38,7 +38,11 @@ export class NewsController {
 
     public update = async (req: Request, res: Response, next: NextFunction) => {
         try {
-            res.send(await this.services.update(req.params.id, req.body));
+            const result = await this.services.update(req.params.id, req.body);
+            res.send({
+                message: "News updated",
+                data: result
+            })
         } catch (error) {
             next(error)
         }

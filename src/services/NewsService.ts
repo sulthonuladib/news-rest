@@ -28,7 +28,6 @@ export class NewsService {
     }
 
     public indexByStatus = async (status) => {
-        console.log(status)
         const news = await this.repository.find({
             where: {
                 status: status
@@ -44,8 +43,12 @@ export class NewsService {
         return await this.repository.save(newsResult);
     }
 
-    public update = async (id, news: News) => {
-        return await this.repository.update(id, news);
+    public update = async (id, news: News): Promise<News> => {
+        const data = await this.repository.findOne(id);
+        console.log('before', data);
+        const updateResult = await this.repository.save({ ...data, ...news });
+        console.log('result', updateResult);
+        return updateResult;
     }
 
     public delete = async (id) => {
