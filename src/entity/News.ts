@@ -37,8 +37,18 @@ export class News {
     })
     status: NewsStatus;
 
-    @ManyToMany(() => Topic)
-    @JoinTable()
+    @ManyToMany(() => Topic, topic => topic.news)
+    @JoinTable({
+        name: "news_topics",
+        joinColumn: {
+            name: "news_id",
+            referencedColumnName: 'id'
+        },
+        inverseJoinColumn: {
+            name: "topic_id",
+            referencedColumnName: 'id'
+        }
+    })
     topics: Topic[];
 
     @CreateDateColumn({
