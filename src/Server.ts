@@ -1,13 +1,12 @@
-import { timeStamp } from 'console';
 import  * as express from 'express';
 import {Request, Response} from 'express';
-import { connect } from 'net';
 import {createConnection} from 'typeorm';
 
 import 'express-async-error'
 
 import { NewsController } from './controllers/NewsController';
 import { TopicController } from './controllers/TopicController';
+import { NewsTopicController } from './controllers/NewsTopicController';
 
 import { News } from './entity/News';
 import { Topic } from './entity/Topic';
@@ -17,6 +16,7 @@ import ExceptionHandlers from './utils/ExceptionHandlers';
 export class Server {
     private newsController: NewsController;
     private topicController: TopicController;
+    private newsTopicController: NewsTopicController;
     private app: express.Application;
 
     constructor() {
@@ -55,9 +55,11 @@ export class Server {
 
         this.newsController = new NewsController();
         this.topicController = new TopicController();
+        this.newsTopicController = new NewsTopicController();
 
         this.app.use('/api/news', this.newsController.router);
         this.app.use('/api/topics', this.topicController.router);
+        this.app.use('/api/news-topic', this.newsTopicController.router);
 
         this.app.get('/api', (req: Request, res: Response) =>  {
             // res.send("news rest api")
