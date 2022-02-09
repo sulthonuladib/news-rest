@@ -1,3 +1,4 @@
+import { getConnection } from "typeorm";
 import { Topic } from "../entity/Topic";
 import { TopicRepository } from "../repositories/TopicRepository";
 
@@ -5,7 +6,7 @@ export class TopicService {
     private repository: TopicRepository;
 
     constructor() {
-        this.repository = new TopicRepository();
+        this.repository = getConnection().getCustomRepository(TopicRepository);
     }
 
     public index = async () => {
@@ -14,8 +15,8 @@ export class TopicService {
     }
 
     public create = async (topic: Topic) => {
-        const topicResult = await this.repository.create(topic)
-        return topicResult;
+        const newTopic = await this.repository.create(topic)
+        return await this.repository.save(newTopic);
     }
 
     public update = async (id, topic: Topic) => {
