@@ -14,32 +14,51 @@ export class NewsService {
             .createQueryBuilder("news")
             .leftJoinAndSelect("news.topics", "topics")
             .getMany();
-            return news;
         return news;
     }
 
-    public indexByTopic = async (topicName: string) => {
+    public findById = async (id: number) => {
         const news = await this.repository
+
             .createQueryBuilder("news")
             .leftJoinAndSelect("news.topics", "topics")
-            .where("topics.name = :topicName", { topicName })
-            .getMany();
+            .where("news.id = :id", { id })
+            .getOne();
         return news;
+    }
+
+
+    public indexByTopic = async (topicName: string) => {
+        try {
+            const news = await this.repository
+                .createQueryBuilder("news")
+                .leftJoinAndSelect("news.topics", "topics")
+                .where("topics.name = :topicName", { topicName })
+                .getMany();
+            return news;
+        } catch (error) {
+            throw new Error('Topic not found')
+        }
     }
 
     public indexByStatus = async (status) => {
-        const news = await this.repository.find({
-            where: {
-                status: status
+        try {
+            const news = await this.repository.find({
+                where: {
+                    status: status
+                }
+            })
+            return news;
+        } catch (err) {
+            if (status != 'published' || status != 'draft' || status != 'deleted') {
+                throw new Error("status name is invalid");
             }
-        })
-        return news;
+
+        }
     }
 
     public create = async (news: News): Promise<News> => {
         let newsResult = await this.repository.create(news);
-        newsResult = { ...newsResult, topics: newsResult.topics }
-
         return await this.repository.save(newsResult);
     }
 
