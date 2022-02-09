@@ -6,6 +6,15 @@
 ### Database Design
 ![](./docs/db-design.png)
 
+### How to
+- still in dev environment
+    - git clone https://github.com/sulthonuladib/news-rest
+    - cd news-rest
+    - npm install
+    - npm build:dev || or straight npm build && npm start:prod
+    - open new terminal session
+    - npm start:dev
+
 ### API Docs
  DEV_URL = localhost:3000/<br>
  theres 3 endpoint which is
