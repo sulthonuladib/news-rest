@@ -9,5 +9,5 @@ export default (err: Error, req: Request, res: Response, _: NextFunction) => {
 
   console.error(err);
 
-  return res.status(500).json({ error: 'Erro interno no servidor.' });
+  return res.status(500).json({ error: 'Internal server error' });
 };
