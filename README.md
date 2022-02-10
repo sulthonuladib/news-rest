@@ -11,6 +11,8 @@
     - git clone https://github.com/sulthonuladib/news-rest
     - cd news-rest
     - npm install
+    - docker-compose up -D
+    - npm run migration:run
     - npm build:dev || or straight npm build && npm start:prod
     - open new terminal session
     - npm start:dev
